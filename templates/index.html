@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Autocorrect System</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 800px;
+            margin: 2em auto;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Important for padding to work well */
+        }
+        .suggestions-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2em;
+        }
+        .box {
+            width: 48%;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .box h3 {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 1px solid #ddd;
+            border-radius: 5px 5px 0 0;
+        }
+        .box ul {
+            list-style-type: none;
+            padding: 15px;
+            margin: 0;
+            min-height: 150px;
+        }
+        .box li {
+            padding: 10px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #eee;
+        }
+        .box li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Adaptive Multilingual Autocorrect System</h1>
+    <input type="text" id="searchInput" placeholder="Start typing...">
+    
+    <div class="suggestions-container">
+        <div class="box">
+            <h3>🔍 Autocomplete</h3>
+            <ul id="autocomplete-list">
+                </ul>
+        </div>
+        <div class="box">
+            <h3>🛠️ Autocorrect</h3>
+            <ul id="correction-list">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        // Find the elements on the page
+        const searchInput = document.getElementById('searchInput');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const correctionList = document.getElementById('correction-list');
+
+        // This function will run every time the user types a key
+        searchInput.addEventListener('input', async (event) => {
+            const query = event.target.value;
+
+            // Clear lists if input is empty
+            if (!query) {
+                autocompleteList.innerHTML = '';
+                correctionList.innerHTML = '';
+                return;
+            }
+
+            // Send the user's query to our Python backend (app.py)
+            const response = await fetch('/get_suggestions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            });
+            
+            const data = await response.json();
+
+            // --- Update the Autocomplete List ---
+            let autoHtml = ''; // Build the HTML string
+            data.autocomplete.forEach(word => {
+                autoHtml += `<li>${word}</li>`;
+            });
+            autocompleteList.innerHTML = autoHtml; // Update the page
+
+            // --- Update the Correction List ---
+            let correctHtml = '';
+            data.corrections.forEach(word => {
+                correctHtml += `<li>${word}</li>`;
+            });
+            correctionList.innerHTML = correctHtml;
+        });
+    </script>
+
+</body>
+</html>
