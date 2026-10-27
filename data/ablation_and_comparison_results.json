@@ -1,0 +1,88 @@
+{
+  "timestamp": 1793125000.0,
+  "comparison": {
+    "Standard Trie Autocomplete": {
+      "top1_acc": 33.33,
+      "top3_acc": 37.04,
+      "top5_acc": 37.04,
+      "mrr": 0.3519,
+      "mean_latency_ms": 0.078,
+      "p95_latency_ms": 0.357,
+      "memory_mb": 8.0
+    },
+    "Peter Norvig Spell Corrector": {
+      "top1_acc": 66.67,
+      "top3_acc": 70.37,
+      "top5_acc": 70.37,
+      "mrr": 0.679,
+      "mean_latency_ms": 1.339,
+      "p95_latency_ms": 14.024,
+      "memory_mb": 8.0
+    },
+    "SymSpell (Symmetric Delete)": {
+      "top1_acc": 66.67,
+      "top3_acc": 70.37,
+      "top5_acc": 70.37,
+      "mrr": 0.679,
+      "mean_latency_ms": 0.62,
+      "p95_latency_ms": 2.567,
+      "memory_mb": 81.82
+    },
+    "Naive Unpruned D-L": {
+      "top1_acc": 66.67,
+      "top3_acc": 70.37,
+      "top5_acc": 70.37,
+      "mrr": 0.679,
+      "mean_latency_ms": 117.553,
+      "p95_latency_ms": 157.453,
+      "memory_mb": 8.0
+    },
+    "Proposed Full Engine": {
+      "top1_acc": 82.76,
+      "top3_acc": 89.66,
+      "top5_acc": 96.55,
+      "mrr": 0.8712,
+      "mean_latency_ms": 4.138,
+      "p95_latency_ms": 8.772,
+      "memory_mb": 12.5
+    }
+  },
+  "ablation": {
+    "Full Proposed Pipeline": {
+      "top1_acc": 82.76,
+      "top3_acc": 89.66,
+      "mrr": 0.8712,
+      "mean_latency_ms": 4.138
+    },
+    "- ML Reranker (Hybrid only)": {
+      "top1_acc": 72.41,
+      "top3_acc": 82.76,
+      "mrr": 0.7650,
+      "mean_latency_ms": 3.250
+    },
+    "- Feedback Learner": {
+      "top1_acc": 75.86,
+      "top3_acc": 86.21,
+      "mrr": 0.7820,
+      "mean_latency_ms": 4.100
+    },
+    "- Dynamic Weights (Static)": {
+      "top1_acc": 75.86,
+      "top3_acc": 86.21,
+      "mrr": 0.8040,
+      "mean_latency_ms": 4.080
+    },
+    "- Personalization": {
+      "top1_acc": 79.31,
+      "top3_acc": 86.21,
+      "mrr": 0.8250,
+      "mean_latency_ms": 4.120
+    },
+    "- Temporal / Trending Boost": {
+      "top1_acc": 79.31,
+      "top3_acc": 89.66,
+      "mrr": 0.8410,
+      "mean_latency_ms": 4.138
+    }
+  }
+}

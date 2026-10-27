@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multilingual Search Intelligence</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">🔬</div>
+        <div>
+          <h1 class="brand-title">Search Intelligence</h1>
+          <p class="brand-subtitle">Multilingual Predictive Engine</p>
+        </div>
+      </div>
+      <div id="status-indicator" class="status-pill status-connecting" title="Checking API connection...">
+        <span class="status-dot"></span>
+        <span id="status-text">Connecting</span>
+      </div>
+    </header>
+
+    <!-- Controls Row -->
+    <div class="controls-row">
+      <div class="control-group">
+        <label for="lang-select">Language</label>
+        <select id="lang-select">
+          <option value="auto">Auto-Detect</option>
+          <option value="english">English</option>
+          <option value="tamil">Tamil (Native)</option>
+          <option value="tamil_romanized">Tamil (Romanized)</option>
+          <option value="hindi">Hindi (Native)</option>
+          <option value="hindi_romanized">Hindi (Romanized)</option>
+          <option value="telugu">Telugu (Native)</option>
+          <option value="telugu_romanized">Telugu (Romanized)</option>
+          <option value="spanish">Spanish</option>
+          <option value="german">German</option>
+          <option value="french">French</option>
+          <option value="italian">Italian</option>
+          <option value="portuguese">Portuguese</option>
+          <option value="dutch">Dutch</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="user-select">User Profile</label>
+        <select id="user-select">
+          <option value="default">Default</option>
+          <option value="developer_alex">Developer Alex</option>
+          <option value="student_priya">Student Priya</option>
+          <option value="news_reader_kumar">News Reader Kumar</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Search Input Bar -->
+    <div class="search-box-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Type query in any language (e.g. 'pythno', 'sapda venum')..."
+        autocomplete="off"
+        spellcheck="false"
+        autofocus
+      />
+      <button id="clear-btn" class="clear-btn" title="Clear input">&times;</button>
+    </div>
+
+    <!-- Quick Test Chips -->
+    <div class="chips-container">
+      <button class="chip" data-query="pythno">🐍 pythno</button>
+      <button class="chip" data-query="pyth">⚡ pyth</button>
+      <button class="chip" data-query="sapda venum">🍛 sapda venum</button>
+      <button class="chip" data-query="informacion">🇪🇸 informacion</button>
+      <button class="chip" data-query="informazion">🇩🇪 informazion</button>
+    </div>
+
+    <!-- Live Metadata Chips -->
+    <div id="meta-bar" class="meta-bar hidden">
+      <div class="meta-item">
+        <span class="meta-label">Language:</span>
+        <span id="meta-lang" class="meta-val badge-blue">English</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Intent:</span>
+        <span id="meta-intent" class="meta-val badge-purple">General</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Latency:</span>
+        <span id="meta-latency" class="meta-val badge-cyan">3.2 ms</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Confidence:</span>
+        <span id="meta-conf" class="meta-val badge-green">HIGH</span>
+      </div>
+    </div>
+
+    <!-- Suggestions List -->
+    <div class="results-header">
+      <span class="results-title">Ranked Predictive Suggestions</span>
+      <span id="results-count" class="results-count">0 suggestions</span>
+    </div>
+
+    <div id="suggestions-list" class="suggestions-list">
+      <div class="empty-state">
+        <div class="empty-icon">⌨️</div>
+        <div class="empty-title">Ready for real-time keystroke prediction</div>
+        <div class="empty-sub">Type a prefix, misspelling, or Tanglish expression above</div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Copied to clipboard!</div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <span>FastAPI • ML Random Forest • 9 Languages</span>
+      <span class="footer-hint">Click suggestion to copy & reinforce feedback</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

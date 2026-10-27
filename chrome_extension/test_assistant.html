@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multilingual Spelling Assistant - Test Harness</title>
+  <link rel="stylesheet" href="content.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 32px 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 18px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-icon {
+      font-size: 32px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: -0.3px;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Instructions Box */
+    .info-card {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-left: 4px solid #38bdf8;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .info-card strong {
+      color: #38bdf8;
+    }
+
+    /* Test Cards */
+    .test-card {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Inputs */
+    .field-wrapper {
+      position: relative;
+    }
+
+    input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      background: #0b0f19;
+      border: 1.5px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      line-height: 1.5;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, [contenteditable="true"]:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Contenteditable */
+    .editable-box {
+      min-height: 110px;
+      background: #0b0f19;
+      border: 1.5px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      line-height: 1.5;
+    }
+
+    /* Quick Preset Buttons */
+    .presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      background: #38bdf8;
+      color: #0b0f19;
+      border-color: #38bdf8;
+    }
+
+    .dynamic-btn {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: all 0.15s ease;
+    }
+
+    .dynamic-btn:hover {
+      background: #38bdf8;
+      color: #0b0f19;
+    }
+
+    code {
+      background: #1e293b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #38bdf8;
+      font-size: 12px;
+    }
+
+    .excluded-field {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <div class="badge-icon">✍️</div>
+        <div>
+          <h1>Grammarly-Style Multilingual Spelling Assistant</h1>
+          <p class="subtitle">Automatic Red Wavy Underlines &bull; Floating Correction Card &bull; 9 Languages &bull; Cross-Site Support</p>
+        </div>
+      </div>
+      <div id="health-badge" class="status-badge">
+        <span class="status-dot"></span>
+        <span id="health-text">FastAPI Engine Ready</span>
+      </div>
+    </header>
+
+    <!-- Instructions -->
+    <div class="info-card">
+      <strong>How to Test:</strong>
+      Type into any field below or click the preset buttons. Misspelled words will display a <strong>red wavy underline</strong>.
+      <strong>Click any underlined word</strong> to open the floating correction card, see ranked alternatives, and replace it with a single click while preserving cursor and surrounding text.
+    </div>
+
+    <!-- Test 1: Single Line Input -->
+    <div class="test-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">1. Standard Text Input (&lt;input type="text"&gt;)</h2>
+          <p class="card-desc">Tests typo detection, mirror underlay wavy lines, and replacement in single-line inputs.</p>
+        </div>
+      </div>
+      <div class="presets-row">
+        <button class="preset-btn" onclick="setInputValue('input-1', 'I recieved your mesage yesterday.')">
+          &ldquo;I recieved your mesage yesterday.&rdquo;
+        </button>
+        <button class="preset-btn" onclick="setInputValue('input-1', 'Please check this pythno script for erors.')">
+          &ldquo;Please check this pythno script for erors.&rdquo;
+        </button>
+      </div>
+      <div class="field-wrapper">
+        <input type="text" id="input-1" value="I recieved your mesage yesterday." placeholder="Type here..." autocomplete="off">
+      </div>
+    </div>
+
+    <!-- Test 2: Multiline Textarea -->
+    <div class="test-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">2. Multiline Textarea (&lt;textarea&gt;)</h2>
+          <p class="card-desc">Tests multiline wrapping, scrolling synchronization, and multiline word replacement.</p>
+        </div>
+      </div>
+      <div class="presets-row">
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'Dear team,\n\nI recieved your mesage regarding the pythno pipeline. He is writting the report now.')">
+          Preset: Multiline English Email
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'Hola amigos, esta informasion es muy util para el projecto.')">
+          Preset: Spanish (&ldquo;informasion&rdquo; &rarr; &ldquo;informacion&rdquo;)
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'sapda venum briyani in chennai restaurant.')">
+          Preset: Tanglish (&ldquo;sapda venum&rdquo; valid)
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'नमस्ते दोस्तों, क्या समाचार है?')">
+          Preset: Hindi Native (&ldquo;नमस्ते&rdquo;, &ldquo;समाचार&rdquo;)
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'నమస్కారం, మీరు ఎలా ఉన్నారు?')">
+          Preset: Telugu Native (&ldquo;నమస్కారం&rdquo;, &ldquo;ఎలా&rdquo;)
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'kya haal hai bhai namaste')">
+          Preset: Hinglish (&ldquo;namaste&rdquo; &rarr; &ldquo;नमस्ते&rdquo;)
+        </button>
+        <button class="preset-btn" onclick="setTextareaValue('textarea-1', 'meeru ela unnaru namaskaram')">
+          Preset: Tenglish (&ldquo;namaskaram&rdquo; &rarr; &ldquo;నమస్కారం&rdquo;)
+        </button>
+      </div>
+      <div class="field-wrapper">
+        <textarea id="textarea-1" placeholder="Type multi-line content...">Dear team,
+
+I recieved your mesage regarding the pythno pipeline. He is writting the report now.</textarea>
+      </div>
+    </div>
+
+    <!-- Test 3: Contenteditable (Gmail, LinkedIn, Twitter/X) -->
+    <div class="test-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">3. Contenteditable Rich Text Editor (Gmail / LinkedIn / Webmail)</h2>
+          <p class="card-desc">Tests inline DOM text node wrapping with <code>.msg-wavy-error</code> and synthetic events.</p>
+        </div>
+      </div>
+      <div class="presets-row">
+        <button class="preset-btn" onclick="setEditableValue('editable-1', 'Hello, I recieved the draft yesterday and it has a small mesage inside.')">
+          Preset: Rich Webmail Compose
+        </button>
+        <button class="preset-btn" onclick="setEditableValue('editable-1', 'We are writting an article about artifisial intelligence.')">
+          Preset: Multiple Typos (&ldquo;writting&rdquo;, &ldquo;artifisial&rdquo;)
+        </button>
+      </div>
+      <div id="editable-1" class="editable-box" contenteditable="true" spellcheck="false">
+        Hello, I recieved the draft yesterday and it has a small mesage inside.
+      </div>
+    </div>
+
+    <!-- Test 4: Dynamic Fields (MutationObserver) -->
+    <div class="test-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">4. Dynamically Created Text Fields (Single-Page Apps / Modals)</h2>
+          <p class="card-desc">Verifies that the MutationObserver automatically monitors dynamically injected DOM nodes.</p>
+        </div>
+      </div>
+      <button class="dynamic-btn" onclick="addDynamicField()">+ Add Dynamic Input Field</button>
+      <div id="dynamic-container" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
+
+    <!-- Test 5: Excluded Sensitive Fields (Privacy Protection) -->
+    <div class="test-card excluded-field">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">5. Excluded Sensitive Fields (Privacy Guarantee)</h2>
+          <p class="card-desc">Password inputs, code snippets, and excluded fields must NEVER be inspected or underlined.</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <input type="password" value="secret_pass_recieved" placeholder="Password input (Excluded)" style="flex: 1;">
+        <input type="number" value="12345" placeholder="Number input (Excluded)" style="flex: 1;">
+      </div>
+      <pre style="background: #0b0f19; border: 1px solid #1e293b; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 12px; color: #94a3b8;">
+<code>// Code block (Excluded):
+const message = "recieved mesage"; // Wavy underlines must NOT appear here</code>
+      </pre>
+    </div>
+  </div>
+
+  <script>
+    function setInputValue(id, val) {
+      const el = document.getElementById(id);
+      el.value = val;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.focus();
+    }
+
+    function setTextareaValue(id, val) {
+      const el = document.getElementById(id);
+      el.value = val;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.focus();
+    }
+
+    function setEditableValue(id, val) {
+      const el = document.getElementById(id);
+      el.textContent = val;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.focus();
+    }
+
+    let dynamicCount = 0;
+    function addDynamicField() {
+      dynamicCount++;
+      const container = document.getElementById('dynamic-container');
+      const div = document.createElement('div');
+      div.className = 'field-wrapper';
+      div.innerHTML = `
+        <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Dynamic Input #${dynamicCount}:</label>
+        <input type="text" value="New dinamic field with recieved typo." placeholder="Dynamic input #${dynamicCount}...">
+      `;
+      container.appendChild(div);
+      const input = div.querySelector('input');
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    // Health check on load
+    fetch('http://127.0.0.1:8000/api/v1/health')
+      .then(res => res.json())
+      .then(data => {
+        const text = document.getElementById('health-text');
+        text.textContent = `FastAPI Ready (${data.supported_languages.length} Languages)`;
+      })
+      .catch(() => {
+        const text = document.getElementById('health-text');
+        text.textContent = 'Backend Offline';
+        text.style.color = '#ef4444';
+      });
+  </script>
+</body>
+</html>

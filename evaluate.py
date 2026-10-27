@@ -26,63 +26,7 @@ def load_json_data(filepath):
     except json.JSONDecodeError:
         return {}
 
-def load_dictionary_and_trie(language="english"):
-    """
-    Loads the specified language dictionary into a Trie and a length-grouped dictionary.
-    Handles both .csv (word,count) and .txt (word) files.
-    """
-    trie = Trie()
-    dictionary_by_length = collections.defaultdict(list)
-    
-    csv_path = os.path.join(DATA_DIR, f"{language}.csv")
-    txt_path = os.path.join(DATA_DIR, f"{language}.txt")
-
-    filepath = None
-    file_type = None
-
-    if os.path.exists(csv_path):
-        filepath = csv_path
-        file_type = "csv"
-    elif os.path.exists(txt_path):
-        filepath = txt_path
-        file_type = "txt"
-    else:
-        print(f"FATAL ERROR: No dictionary file found for '{language}'.")
-        print(f"Checked for '{csv_path}' and '{txt_path}'.")
-        return None, None
-
-    print(f"\nLoading dictionary for '{language}' from {filepath}...")
-
-    try:
-        # Use encoding="utf-8" to handle all languages
-        with open(filepath, "r", encoding="utf-8") as f:
-            
-            if file_type == "csv":
-                reader = csv.DictReader(f)
-                for row in reader:
-                    word = row.get("word", "").strip().lower()
-                    if not word: continue
-                    try:
-                        freq = int(row.get("count", 1))
-                    except (ValueError, KeyError):
-                        freq = 1
-                    trie.insert(word, freq)
-                    dictionary_by_length[len(word)].append(word)
-            
-            else:
-                for line in f:
-                    word = line.strip().lower()
-                    if not word: continue
-                    freq = 1
-                    trie.insert(word, freq)
-                    dictionary_by_length[len(word)].append(word)
-
-    except Exception as e:
-        print(f"FATAL ERROR: Could not read file {filepath}. Error: {e}")
-        return None, None
-    
-    print(f"Dictionary for '{language}' loaded successfully!")
-    return trie, dictionary_by_length
+from data_loader import load_dictionary_and_trie
 
 def run_test(test_cases, trie, dictionary_by_length, user_frequencies):
     """

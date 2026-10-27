@@ -1,0 +1,434 @@
+{
+  "default": {
+    "user_id": "default",
+    "display_name": "Default Global User",
+    "created_at": 1792947996.110401,
+    "last_active": 1793127075.890079,
+    "total_interactions": 5,
+    "word_affinities": {
+      "i love python": 2,
+      "python": 3
+    },
+    "intent_affinities": {
+      "general_search": 5.0
+    },
+    "language_affinities": {
+      "english": 5
+    },
+    "recent_queries": [
+      {
+        "query": "i lov pyton",
+        "chosen": "i love python",
+        "time": 1793105273.7268648
+      },
+      {
+        "query": "i lov pyton",
+        "chosen": "i love python",
+        "time": 1793105394.929701
+      },
+      {
+        "query": "pythno",
+        "chosen": "python",
+        "time": 1793105417.5021598
+      },
+      {
+        "query": "pythno",
+        "chosen": "python",
+        "time": 1793127070.134666
+      },
+      {
+        "query": "pythno",
+        "chosen": "python",
+        "time": 1793127075.890079
+      }
+    ],
+    "dismissals": {
+      "i love peyton": 2,
+      "i love payton": 2,
+      "i love pylon": 2,
+      "i love paton": 2,
+      "pytho": 3,
+      "pythons": 3,
+      "pythia": 3,
+      "patho": 3
+    }
+  },
+  "alice": {
+    "user_id": "alice",
+    "display_name": "Alice",
+    "created_at": 1792947996.110434,
+    "last_active": 1793115182.2555761,
+    "total_interactions": 12,
+    "word_affinities": {
+      "python": 12
+    },
+    "intent_affinities": {
+      "technical": 2.0
+    },
+    "language_affinities": {
+      "english": 2
+    },
+    "recent_queries": [
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792947996.110432
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1792947996.1107461
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792948787.752521
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792949129.162397
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792949410.183625
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792949671.9623702
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792953237.7949739
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792955582.24266
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793105758.146219
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793108909.439799
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793114845.515307
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793115182.2555761
+      }
+    ],
+    "dismissals": {
+      "pylon": 10
+    }
+  },
+  "brand_new_cold_user": {
+    "user_id": "brand_new_cold_user",
+    "display_name": "Brand_new_cold_user",
+    "created_at": 1792948787.655853,
+    "last_active": 1792948787.655853,
+    "total_interactions": 0,
+    "word_affinities": {},
+    "intent_affinities": {},
+    "language_affinities": {},
+    "recent_queries": [],
+    "dismissals": {}
+  },
+  "test_user_alice": {
+    "user_id": "test_user_alice",
+    "display_name": "Test_user_alice",
+    "created_at": 1792949672.028716,
+    "last_active": 1793115182.3340318,
+    "total_interactions": 14,
+    "word_affinities": {
+      "python": 14
+    },
+    "intent_affinities": {
+      "technical": 14.0
+    },
+    "language_affinities": {
+      "english": 14
+    },
+    "recent_queries": [
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1792949672.028715
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1792949672.029294
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1792953237.975878
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1792953237.9765089
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1792955582.308182
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1792955582.308866
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1793105758.3473432
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1793105758.34814
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1793108909.508896
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1793108909.509592
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1793114845.6120598
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1793114845.612881
+      },
+      {
+        "query": "py",
+        "chosen": "python",
+        "time": 1793115182.332874
+      },
+      {
+        "query": "pyth",
+        "chosen": "python",
+        "time": 1793115182.3340318
+      }
+    ],
+    "dismissals": {
+      "pyramid": 14
+    }
+  },
+  "test_user_bob": {
+    "user_id": "test_user_bob",
+    "display_name": "Test_user_bob",
+    "created_at": 1792949672.0296068,
+    "last_active": 1793115182.3349729,
+    "total_interactions": 7,
+    "word_affinities": {
+      "pyramid": 7
+    },
+    "intent_affinities": {
+      "general_search": 7.0
+    },
+    "language_affinities": {
+      "english": 7
+    },
+    "recent_queries": [
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1792949672.0296052
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1792953237.976852
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1792955582.309493
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1793105758.3489761
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1793108909.510069
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1793114845.6133702
+      },
+      {
+        "query": "pyr",
+        "chosen": "pyramid",
+        "time": 1793115182.3349729
+      }
+    ],
+    "dismissals": {
+      "python": 7
+    }
+  },
+  "pytest_user": {
+    "user_id": "pytest_user",
+    "display_name": "Pytest_user",
+    "created_at": 1792955309.6588008,
+    "last_active": 1793133600.483583,
+    "total_interactions": 11,
+    "word_affinities": {
+      "python": 11
+    },
+    "intent_affinities": {},
+    "language_affinities": {},
+    "recent_queries": [
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792955309.658798
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792955367.752295
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1792955454.608651
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793105726.933964
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793106660.4291
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793108606.1350322
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793114563.923263
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793114822.671226
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793114884.6912599
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793115102.249206
+      },
+      {
+        "query": "pythn",
+        "chosen": "python",
+        "time": 1793133600.483583
+      }
+    ],
+    "dismissals": {
+      "pylon": 11
+    }
+  },
+  "test_user": {
+    "user_id": "test_user",
+    "display_name": "Test_user",
+    "created_at": 1793129799.1334772,
+    "last_active": 1793129926.5908852,
+    "total_interactions": 1,
+    "word_affinities": {
+      "received": 1
+    },
+    "intent_affinities": {},
+    "language_affinities": {},
+    "recent_queries": [
+      {
+        "query": "recieved",
+        "chosen": "received",
+        "time": 1793129926.5908852
+      }
+    ],
+    "dismissals": {}
+  },
+  "inline_tester": {
+    "user_id": "inline_tester",
+    "display_name": "Inline_tester",
+    "created_at": 1793130216.6452281,
+    "last_active": 1793130218.6120691,
+    "total_interactions": 1,
+    "word_affinities": {
+      "received": 1
+    },
+    "intent_affinities": {},
+    "language_affinities": {},
+    "recent_queries": [
+      {
+        "query": "recieved",
+        "chosen": "received",
+        "time": 1793130218.6120691
+      }
+    ],
+    "dismissals": {}
+  },
+  "chrome_inline_assistant": {
+    "user_id": "chrome_inline_assistant",
+    "display_name": "Chrome_inline_assistant",
+    "created_at": 1793130982.262809,
+    "last_active": 1793131753.6766489,
+    "total_interactions": 2,
+    "word_affinities": {
+      "received": 1,
+      "message": 1
+    },
+    "intent_affinities": {},
+    "language_affinities": {},
+    "recent_queries": [
+      {
+        "query": "recieved",
+        "chosen": "received",
+        "time": 1793131748.839366
+      },
+      {
+        "query": "mesage",
+        "chosen": "message",
+        "time": 1793131753.6766489
+      }
+    ],
+    "dismissals": {}
+  }
+}

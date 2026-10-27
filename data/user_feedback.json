@@ -1,0 +1,145 @@
+{
+    "word_feedback": {
+        "customtarget": {
+            "positive": 8,
+            "negative": 0,
+            "accepts": 0
+        },
+        "othertarget": {
+            "positive": 0,
+            "negative": 8,
+            "accepts": 0
+        },
+        "python": {
+            "positive": 27,
+            "negative": 0,
+            "accepts": 3
+        },
+        "pylon": {
+            "positive": 0,
+            "negative": 21,
+            "accepts": 0
+        },
+        "i love python": {
+            "positive": 4,
+            "negative": 0,
+            "accepts": 2
+        },
+        "i love peyton": {
+            "positive": 0,
+            "negative": 2,
+            "accepts": 0
+        },
+        "i love payton": {
+            "positive": 0,
+            "negative": 2,
+            "accepts": 0
+        },
+        "i love pylon": {
+            "positive": 0,
+            "negative": 2,
+            "accepts": 0
+        },
+        "i love paton": {
+            "positive": 0,
+            "negative": 2,
+            "accepts": 0
+        },
+        "pytho": {
+            "positive": 0,
+            "negative": 3,
+            "accepts": 0
+        },
+        "pythons": {
+            "positive": 0,
+            "negative": 3,
+            "accepts": 0
+        },
+        "pythia": {
+            "positive": 0,
+            "negative": 3,
+            "accepts": 0
+        },
+        "patho": {
+            "positive": 0,
+            "negative": 3,
+            "accepts": 0
+        },
+        "received": {
+            "positive": 3,
+            "negative": 0,
+            "accepts": 0
+        },
+        "message": {
+            "positive": 1,
+            "negative": 0,
+            "accepts": 0
+        }
+    },
+    "query_affinity": {
+        "testquery:::customtarget": {
+            "positive": 8,
+            "negative": 0
+        },
+        "testquery:::othertarget": {
+            "positive": 0,
+            "negative": 8
+        },
+        "pythn:::python": {
+            "positive": 21,
+            "negative": 0
+        },
+        "pythn:::pylon": {
+            "positive": 0,
+            "negative": 21
+        },
+        "i lov pyton:::i love python": {
+            "positive": 4,
+            "negative": 0
+        },
+        "i lov pyton:::i love peyton": {
+            "positive": 0,
+            "negative": 2
+        },
+        "i lov pyton:::i love payton": {
+            "positive": 0,
+            "negative": 2
+        },
+        "i lov pyton:::i love pylon": {
+            "positive": 0,
+            "negative": 2
+        },
+        "i lov pyton:::i love paton": {
+            "positive": 0,
+            "negative": 2
+        },
+        "pythno:::python": {
+            "positive": 6,
+            "negative": 0
+        },
+        "pythno:::pytho": {
+            "positive": 0,
+            "negative": 3
+        },
+        "pythno:::pythons": {
+            "positive": 0,
+            "negative": 3
+        },
+        "pythno:::pythia": {
+            "positive": 0,
+            "negative": 3
+        },
+        "pythno:::patho": {
+            "positive": 0,
+            "negative": 3
+        },
+        "recieved:::received": {
+            "positive": 3,
+            "negative": 0
+        },
+        "mesage:::message": {
+            "positive": 1,
+            "negative": 0
+        }
+    }
+}

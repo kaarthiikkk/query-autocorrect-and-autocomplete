@@ -1,159 +1,246 @@
-# File: main.py
-
 import csv
-import time
-import collections
-import json
 import os
-# NEW (Feature 5): Import deque for a fixed-size list
-from collections import deque
+import sys
+import time
 
 from trie import Trie
-from suggestor import autocomplete
-from corrector import correct_query
+from query_analyzer import analyze_query
+from hybrid import generate_hybrid_candidates
+from ranker import rank_multilingual_candidates
+from dynamic_weights import get_dynamic_weights
+from feedback_learner import get_feedback_learner
 
-# --- File Paths ---
-DATA_DIR = "data"
-# NEW (Feature 5): Add a path for the recent suggestions cache
-RECENT_PATH = os.path.join(DATA_DIR, "recent.json")
-# (Feature 2) Path for adaptive learning
-USER_FREQ_PATH = os.path.join(DATA_DIR, "user_freq.json")
+ENGLISH_DICT_PATH = "data/english.csv"
+TAMIL_DICT_PATH = "data/tamil_small.csv"
 
-# --- Helper functions for JSON (Unchanged) ---
-def load_json_data(filepath):
-    """Loads a JSON file. If it doesn't exist, returns an empty dictionary."""
-    if not os.path.exists(filepath):
-        return {}
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        return {}
 
-def save_json_data(data, filepath):
-    """Saves a dictionary to a JSON file."""
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
-# --- Global Data Loading (Using English as default for now) ---
-def load_dictionary_and_trie(language="english"):
-    # We are defaulting to 'english.csv' as you requested.
-    filepath = os.path.join(DATA_DIR, f"{language}.csv")
-    print(f"\nLoading dictionary for '{language}' from {filepath}...")
-    
+def load_dictionary_from_csv(filepath):
     trie = Trie()
-    dictionary_by_length = collections.defaultdict(list)
+    dictionary_by_length = {}
+    total_words = 0
+
+    if not os.path.exists(filepath):
+        print(f"Error: Data file not found at '{filepath}'")
+        return trie, dictionary_by_length
 
     try:
-        # Renaming 'unigram_freq.csv' to 'english.csv'
         with open(filepath, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
+            reader = csv.reader(f)
             for row in reader:
-                word = row.get("word", "").strip().lower()
-                if not word: continue
-                try:
-                    freq = int(row.get("count", 1))
-                except (ValueError, KeyError):
-                    freq = 1
-                trie.insert(word, freq)
-                dictionary_by_length[len(word)].append(word)
-    except FileNotFoundError:
-        print(f"FATAL ERROR: Language file '{filepath}' not found.")
-        print("Please make sure you have a file named 'english.csv' in your 'data' folder.")
-        return None, None
-    
-    print(f"Dictionary for '{language}' loaded successfully!")
+                if not row:
+                    continue
+                word = row[0].strip().lower()
+                freq = int(row[1]) if len(row) > 1 and row[1].isdigit() else 1
+
+                if word:
+                    trie.insert(word, frequency=freq)
+                    length = len(word)
+                    dictionary_by_length.setdefault(length, []).append(word)
+                    total_words += 1
+
+        print(f"Dictionary for '{os.path.basename(filepath)}' loaded successfully!")
+        print(f"Total words loaded: {total_words}\n")
+    except Exception as e:
+        print(f"Error loading dictionary file '{filepath}': {e}")
+
     return trie, dictionary_by_length
 
-# --- Main Program Logic ---
+
+def detect_language(query):
+    query = query.strip()
+    if not query:
+        return "english", "native_script"
+
+    tamil_chars = sum(1 for char in query if '\u0B80' <= char <= '\u0BFF')
+
+    if tamil_chars > 0 and len(query.replace(" ", "")) == tamil_chars:
+        return "tamil", "native_script"
+    elif tamil_chars > 0:
+        return "mixed", "code_switched"
+
+    romanized_tamil_markers = {"iruku", "irruku", "irukka", "sapda", "saapadu", "venum", "kammal", "enga"}
+    words = set(query.lower().split())
+    if words.intersection(romanized_tamil_markers):
+        return "tamil", "romanized"
+
+    return "english", "native_script"
+
+
+def detect_intent(query):
+    q = query.lower().strip()
+    if any(k in q for k in ["buy", "price", "cheap", "cost", "order", "discount"]):
+        return "transactional"
+    if any(k in q for k in ["how", "what", "why", "where", "who", "code"]):
+        return "question"
+    if any(k in q for k in ["near", "nearby", "location", "hotel", "restaurant", "map"]):
+        return "local"
+    if any(k in q for k in ["youtube", "facebook", "login", "portal", "yt"]):
+        return "navigational"
+    return "general_search"
+
+
+def calculate_confidence(ranked_suggestions):
+    if not ranked_suggestions:
+        return "low", 0.0
+
+    top_score = ranked_suggestions[0].get("hybrid_score", ranked_suggestions[0].get("final_score", 0.0))
+    if top_score >= 0.80:
+        return "high", round(top_score, 3)
+    elif top_score >= 0.50:
+        return "medium", round(top_score, 3)
+    return "low", round(top_score, 3)
+
+
 def main():
-    # --- Load Data (Defaulting to English) ---
-    trie, dictionary_by_length = load_dictionary_and_trie("english")
-    if trie is None:
-        exit()
+    print("\nLoading multilingual resources...\n")
 
-    # --- Load Adaptive Learning Data (Feature 2) ---
-    user_frequencies = load_json_data(USER_FREQ_PATH)
-    print(f"Loaded {len(user_frequencies)} user-learned words.")
+    print(f"Loading dictionary for 'english' from {ENGLISH_DICT_PATH}...")
+    eng_trie, eng_dict_by_length = load_dictionary_from_csv(ENGLISH_DICT_PATH)
 
-    # --- NEW: Load Recent Suggestions Cache (Feature 5) ---
-    # We load the list of words from the JSON
-    recent_list = load_json_data(RECENT_PATH).get("recent_words", [])
-    # We put it in a deque (a fixed-size list). We'll keep the 10 most recent.
-    recent_suggestions = deque(recent_list, maxlen=10)
-    
-    if recent_suggestions:
-        print("\n🌟 Recent Suggestions:")
-        for item in recent_suggestions:
-            print(f"  - {item}")
-    # --- END NEW (Feature 5) ---
+    print(f"Loading dictionary for 'tamil' from {TAMIL_DICT_PATH}...")
+    tam_trie, tam_dict_by_length = load_dictionary_from_csv(TAMIL_DICT_PATH)
+
+    language_data = {
+        "english": (eng_trie, eng_dict_by_length),
+        "tamil": (tam_trie, tam_dict_by_length),
+    }
+
+    learner = get_feedback_learner()
+    user_freq = learner.get_user_frequencies()
+    print(f"Loaded {len(user_freq)} user preferences.\n")
+    print("Adaptive Multilingual Autocorrect System\n")
 
     while True:
-        query = input("\nEnter your search query (or 'exit'): ").strip().lower()
-        if query == "exit":
-            # --- NEW: Save Recent Suggestions on exit (Feature 5) ---
-            save_json_data({"recent_words": list(recent_suggestions)}, RECENT_PATH)
-            # --- END NEW (Feature 5) ---
-            
-            # Save Adaptive Learning data (Feature 2)
-            save_json_data(user_frequencies, USER_FREQ_PATH)
-            print(f"\nYour preferences and recent history have been saved. Goodbye!")
+        try:
+            raw_input_query = input("Enter your search query (or 'exit'): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting system...")
+            sys.exit(0)
+
+        if raw_input_query.lower() in {"exit", "quit"}:
+            print("Exiting system...")
             break
-        
-        if not query:
+
+        if not raw_input_query:
             continue
 
-        # --- Autocomplete (Feature 1: Tracker) ---
-        start_time_auto = time.time()
-        auto_suggestions = autocomplete(trie, query, k=5)
-        end_time_auto = time.time()
-        auto_time_ms = (end_time_auto - start_time_auto) * 1000
-        print(f"\n🔍 Autocomplete Suggestions (took {auto_time_ms:.2f} ms):")
-        if auto_suggestions:
-            for i, word in enumerate(auto_suggestions, 1):
-                print(f" {i}. {word}")
+        start_time = time.time()
+
+        lang, lang_type = detect_language(raw_input_query)
+        intent = detect_intent(raw_input_query)
+
+        # Choose primary trie for the detected language
+        active_trie, active_dict_by_length = language_data.get(lang, (eng_trie, eng_dict_by_length))
+
+        print(f"\nDetected Language: {lang}")
+        print(f"Query Type: {lang_type}")
+        print(f"Intent: {intent}")
+
+        candidates = generate_hybrid_candidates(
+            trie=active_trie,
+            dictionary_by_length=active_dict_by_length,
+            query=raw_input_query,
+            user_freq=learner.get_user_frequencies(),
+            threshold=2,
+            language_data=language_data
+        )
+
+        dynamic_w = get_dynamic_weights(
+            query=raw_input_query,
+            intent=intent,
+            language=lang,
+            language_type=lang_type,
+            candidates=candidates
+        )
+
+        final_ranked = rank_multilingual_candidates(
+            query=raw_input_query,
+            candidates=candidates,
+            language_data=language_data,
+            user_freq=learner.get_user_frequencies(),
+            intent=intent,
+            top_k=5,
+            weights=dynamic_w["weights"]
+        )
+
+        elapsed_ms = round((time.time() - start_time) * 1000, 2)
+
+        # ----------------------------------------------------------------
+        # Display — show full phrase (display_suggestion) when available
+        # ----------------------------------------------------------------
+
+        def _display(item):
+            return item.get("display_suggestion") or item.get("full_query") or item["word"]
+
+        autocomplete_items = [c for c in candidates if c.get("source") in {"autocomplete", "hybrid"}]
+        print(f"\nAutocomplete ({elapsed_ms} ms):")
+        if autocomplete_items:
+            for i, item in enumerate(autocomplete_items[:5], 1):
+                print(f" {i}. {_display(item)}")
         else:
             print(" No autocomplete suggestions found.")
 
-        # --- Spell Correction (Features 1 & 2) ---
-        start_time_correct = time.time()
-        # Pass user_frequencies (Feature 2)
-        corrections = correct_query(dictionary_by_length, trie, query, user_frequencies, threshold=2, max_results=5)
-        end_time_correct = time.time()
-        correct_time_ms = (end_time_correct - start_time_correct) * 1000
-        print(f"\n🛠 Spell Correction Suggestions (took {correct_time_ms:.2f} ms):")
-        
-        if not corrections:
-            print(" No corrections found.")
+        correction_items = [c for c in candidates if c.get("source") in {"correction", "damerau_levenshtein"}]
+        print("\nSpell Corrections:")
+        if correction_items:
+            for i, item in enumerate(correction_items[:5], 1):
+                print(f" {i}. {_display(item)}")
         else:
-            for i, word in enumerate(corrections, 1):
-                print(f" {i}. {word}")
+            print(" No spelling corrections needed.")
 
-            # --- Learning Interaction (Features 2 & 5) ---
-            try:
-                choice_str = input("\nType the number of the correct word to learn it (or press Enter to skip): ")
-                if not choice_str: continue
-                choice_idx = int(choice_str) - 1
-                
-                if 0 <= choice_idx < len(corrections):
-                    chosen_word = corrections[choice_idx]
-                    
-                    # 1. Add to adaptive learning (Feature 2)
-                    user_frequencies[chosen_word] = user_frequencies.get(chosen_word, 0) + 1
-                    print(f"✅ Learned! '{chosen_word}' now has a preference count of {user_frequencies[chosen_word]}.")
+        print("\nFinal Ranked Suggestions:")
+        if final_ranked:
+            for i, item in enumerate(final_ranked, 1):
+                print(f" {i}. {_display(item)}")
+        else:
+            print(" No ranked suggestions available.")
 
-                    # --- NEW: Add to Recent Suggestions (Feature 5) ---
-                    # If word is already in the list, remove it first
-                    if chosen_word in recent_suggestions:
-                        recent_suggestions.remove(chosen_word)
-                    # Add it to the front of the list
-                    recent_suggestions.appendleft(chosen_word)
-                    # --- END NEW (Feature 5) ---
-                else:
-                    print("Invalid number. Skipping learning.")
-            except (ValueError):
-                print("Invalid input. Skipping learning.")
+        conf_level, conf_score = calculate_confidence(final_ranked)
+        print(f"\nConfidence: {conf_level}")
+        print(f"Confidence Score: {conf_score}\n")
+
+        # ----------------------------------------------------------------
+        # Feedback handler — accepts index number, word string, or Enter
+        # ----------------------------------------------------------------
+
+        feedback_input = input("Select a suggestion (number or word, Enter to skip): ").strip()
+
+        if not feedback_input:
+            print()
+            continue
+
+        # Determine chosen word
+        chosen_word = None
+        if feedback_input.isdigit():
+            idx = int(feedback_input) - 1
+            if 0 <= idx < len(final_ranked):
+                chosen_word = _display(final_ranked[idx])
+            else:
+                print(f" Invalid index. Please enter 1–{len(final_ranked)}.\n")
+                continue
+        else:
+            chosen_word = feedback_input
+
+        rejected = [_display(item) for item in final_ranked if _display(item) != chosen_word]
+        learner.record_interaction(
+            query=raw_input_query,
+            chosen_word=chosen_word,
+            rejected_words=rejected,
+            interaction_type="select"
+        )
+        from temporal_ranker import get_temporal_ranker
+        get_temporal_ranker().record_selection(chosen_word, query=raw_input_query)
+        from personalized_ranker import get_personalized_ranker
+        get_personalized_ranker().record_user_interaction(
+            user_id="default",
+            query=raw_input_query,
+            chosen_word=chosen_word,
+            rejected_words=rejected,
+            intent=intent,
+            language=lang
+        )
+        print(f"Recorded preference for: '{chosen_word}'\n")
+
 
 if __name__ == "__main__":
-    main()
+    main()

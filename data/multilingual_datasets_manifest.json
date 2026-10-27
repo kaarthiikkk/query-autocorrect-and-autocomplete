@@ -1,0 +1,74 @@
+{
+  "generator": "scripts/build_multilingual_datasets.py",
+  "generated_at_utc": "2026-10-27T17:26:37.372844Z",
+  "source": "wordfreq (Python library by Robyn Speer / Luminoso Technologies)",
+  "source_url": "https://pypi.org/project/wordfreq/",
+  "source_version": "unknown",
+  "license": "Creative Commons Attribution-ShareAlike 4.0 / MIT",
+  "frequency_representation": {
+    "scale": "Integer frequency count derived as round(P * 1,000,000,000)",
+    "rationale": "Matches existing English and Tamil integer frequency scaling in ranker.py log-frequency calculation without dominating hybrid weights."
+  },
+  "languages": {
+    "spanish": {
+      "language_code": "es",
+      "language_name": "spanish",
+      "file_path": "data/spanish.csv",
+      "row_count": 20000,
+      "min_frequency": 2340,
+      "max_frequency": 64600000,
+      "min_zipf": 3.37,
+      "max_zipf": 7.81
+    },
+    "german": {
+      "language_code": "de",
+      "language_name": "german",
+      "file_path": "data/german.csv",
+      "row_count": 20000,
+      "min_frequency": 2630,
+      "max_frequency": 30200000,
+      "min_zipf": 3.42,
+      "max_zipf": 7.48
+    },
+    "french": {
+      "language_code": "fr",
+      "language_name": "french",
+      "file_path": "data/french.csv",
+      "row_count": 20000,
+      "min_frequency": 2090,
+      "max_frequency": 47900000,
+      "min_zipf": 3.32,
+      "max_zipf": 7.68
+    },
+    "italian": {
+      "language_code": "it",
+      "language_name": "italian",
+      "file_path": "data/italian.csv",
+      "row_count": 20000,
+      "min_frequency": 2570,
+      "max_frequency": 38900000,
+      "min_zipf": 3.41,
+      "max_zipf": 7.59
+    },
+    "portuguese": {
+      "language_code": "pt",
+      "language_name": "portuguese",
+      "file_path": "data/portuguese.csv",
+      "row_count": 20000,
+      "min_frequency": 2340,
+      "max_frequency": 47900000,
+      "min_zipf": 3.37,
+      "max_zipf": 7.68
+    },
+    "dutch": {
+      "language_code": "nl",
+      "language_name": "dutch",
+      "file_path": "data/dutch.csv",
+      "row_count": 20000,
+      "min_frequency": 1910,
+      "max_frequency": 53700000,
+      "min_zipf": 3.28,
+      "max_zipf": 7.73
+    }
+  }
+}

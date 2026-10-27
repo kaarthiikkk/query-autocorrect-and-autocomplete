@@ -3,126 +3,654 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adaptive Autocorrect System</title>
+    <title>Multilingual AI Search Engine & Autocorrect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-card: #1e293b;
+            --surface-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-cyan: #06b6d4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            max-width: 800px;
-            margin: 2em auto;
-            padding: 2em;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        h1 {
-            text-align: center;
-            color: #0056b3;
-        }
-        input[type="text"] {
+
+        .container {
             width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box; /* Important for padding to work well */
+            max-width: 900px;
         }
-        .suggestions-container {
+
+        /* Header & Profile Switcher */
+        .header {
             display: flex;
             justify-content: space-between;
-            margin-top: 2em;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .box {
-            width: 48%;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
         }
-        .box h3 {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin: 0;
-            border-bottom: 1px solid #ddd;
-            border-radius: 5px 5px 0 0;
+
+        .user-selector-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--surface-border);
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
-        .box ul {
-            list-style-type: none;
-            padding: 15px;
-            margin: 0;
-            min-height: 150px;
+
+        .user-select {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
         }
-        .box li {
-            padding: 10px;
-            font-size: 1.1em;
-            border-bottom: 1px solid #eee;
+
+        .user-select option {
+            background: var(--surface);
+            color: var(--text-main);
         }
-        .box li:last-child {
+
+        /* Search Input Box */
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.15rem 1.4rem;
+            font-size: 1.15rem;
+            font-family: inherit;
+            color: var(--text-main);
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--surface-border);
+            border-radius: 14px;
+            outline: none;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25), 0 8px 30px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Trending Pills */
+        .trending-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .trending-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-amber);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trending-chip {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            color: #fcd34d;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .trending-chip:hover {
+            background: rgba(245, 158, 11, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Panels Grid */
+        .grid-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-two {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            padding: 0.85rem 1.2rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-bottom: 1px solid var(--surface-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .list-group {
+            list-style: none;
+            padding: 0.5rem 0;
+            min-height: 120px;
+        }
+
+        .list-item {
+            padding: 0.75rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            transition: all 0.15s ease;
+            font-size: 0.95rem;
+        }
+
+        .list-item:hover {
+            background: rgba(37, 99, 235, 0.15);
+            padding-left: 1.4rem;
+        }
+
+        .list-item:last-child {
             border-bottom: none;
+        }
+
+        /* Top-K Personalized Suggestions Panel */
+        .pers-panel {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid #4338ca;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(67, 56, 202, 0.15);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .pers-header {
+            background: linear-gradient(90deg, rgba(67, 56, 202, 0.3) 0%, rgba(30, 41, 59, 0.5) 100%);
+            padding: 1rem 1.3rem;
+            border-bottom: 1px solid #4338ca;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pers-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #c7d2fe;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pers-list {
+            list-style: none;
+            padding: 0.5rem 0;
+        }
+
+        .pers-item {
+            padding: 0.85rem 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(67, 56, 202, 0.2);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .pers-item:hover {
+            background: rgba(67, 56, 202, 0.2);
+            padding-left: 1.5rem;
+        }
+
+        .pers-item:last-child {
+            border-bottom: none;
+        }
+
+        .cand-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .cand-rank {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            font-size: 0.75rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cand-word {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .cand-badges {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-pers {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+        }
+
+        .badge-trend {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fde68a;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+
+        .badge-burst {
+            background: rgba(244, 63, 94, 0.2);
+            color: #fecdd3;
+            border: 1px solid rgba(244, 63, 94, 0.35);
+        }
+
+        .badge-ml {
+            background: rgba(16, 185, 129, 0.2);
+            color: #a7f3d0;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+
+        .cand-reason {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        /* Intelligence Meta Footer */
+        .meta-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 1rem 1.3rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .meta-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .meta-pill strong {
+            color: var(--text-main);
+        }
+
+        .status-toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: #10b981;
+            color: #fff;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .status-toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <h1>Adaptive Multilingual Autocorrect System</h1>
-    <input type="text" id="searchInput" placeholder="Start typing...">
-    
-    <div class="suggestions-container">
-        <div class="box">
-            <h3>🔍 Autocomplete</h3>
-            <ul id="autocomplete-list">
-                </ul>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="brand-title">Multilingual AI Search Engine</h1>
+            <div class="user-selector-bar">
+                <span>Active Profile:</span>
+                <select id="userSelect" class="user-select" onchange="onUserChange()">
+                    <option value="default">👤 Default User</option>
+                    <option value="alice">👩‍💻 Alice (Python Dev)</option>
+                    <option value="bob">👨‍🍳 Bob (Foodie)</option>
+                    <option value="kavitha">🌐 Kavitha (Bilingual Tamil)</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Search Box -->
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="Type a search query in English, Tamil, or Romanized (e.g., 'python', 'venum', 'இன்று')..." autocomplete="off" autofocus>
         </div>
-        <div class="box">
-            <h3>🛠️ Autocorrect</h3>
-            <ul id="correction-list">
+
+        <!-- Trending Topics -->
+        <div class="trending-container">
+            <span class="trending-label">🔥 Trending Now:</span>
+            <div id="trendingPills" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <span style="color:var(--text-muted); font-size:0.8rem;">Loading trending queries...</span>
+            </div>
+        </div>
+
+        <!-- Feature 15: Top-K Personalized Suggestions Panel -->
+        <div class="pers-panel">
+            <div class="pers-header">
+                <span class="pers-title">
+                    🎯 Top-k Personalized Suggestions
+                    <span id="activeUserBadge" class="badge badge-pers">User: Default</span>
+                </span>
+                <span id="mlStatusBadge" class="badge badge-ml">ML Reranker: ON</span>
+            </div>
+            <ul id="personalizedList" class="pers-list">
+                <li style="padding:1.5rem; color:var(--text-muted); text-align:center;">Start typing to receive personalized multilingual recommendations</li>
+            </ul>
+        </div>
+
+        <!-- Autocomplete & Autocorrect Split View -->
+        <div class="grid-two">
+            <div class="card">
+                <div class="card-header">
+                    <span>🔍 Prefix Autocomplete</span>
+                    <span id="autoCount" style="font-size:0.75rem; color:var(--text-muted);">0 items</span>
+                </div>
+                <ul id="autocompleteList" class="list-group">
+                    <li style="padding:1rem; color:var(--text-muted); text-align:center;">—</li>
                 </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>🛠️ Spelling Corrections (Damerau-Levenshtein)</span>
+                    <span id="corrCount" style="font-size:0.75rem; color:var(--text-muted);">0 items</span>
+                </div>
+                <ul id="correctionList" class="list-group">
+                    <li style="padding:1rem; color:var(--text-muted); text-align:center;">—</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Real-Time Pipeline Diagnostics Meta -->
+        <div class="meta-card">
+            <div class="meta-pill"><span>Language:</span> <strong id="metaLang">—</strong></div>
+            <div class="meta-pill"><span>Intent:</span> <strong id="metaIntent">—</strong></div>
+            <div class="meta-pill"><span>Confidence:</span> <strong id="metaConf">—</strong></div>
+            <div class="meta-pill"><span>Temporal:</span> <strong id="metaTemporal">—</strong></div>
+            <div class="meta-pill"><span>Ambiguity:</span> <strong id="metaAmbig">—</strong></div>
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="status-toast">Feedback recorded!</div>
+
     <script>
-        // Find the elements on the page
         const searchInput = document.getElementById('searchInput');
-        const autocompleteList = document.getElementById('autocomplete-list');
-        const correctionList = document.getElementById('correction-list');
+        const userSelect = document.getElementById('userSelect');
+        const trendingPills = document.getElementById('trendingPills');
+        const personalizedList = document.getElementById('personalizedList');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const correctionList = document.getElementById('correctionList');
+        const activeUserBadge = document.getElementById('activeUserBadge');
+        const mlStatusBadge = document.getElementById('mlStatusBadge');
+        const autoCount = document.getElementById('autoCount');
+        const corrCount = document.getElementById('corrCount');
+        const metaLang = document.getElementById('metaLang');
+        const metaIntent = document.getElementById('metaIntent');
+        const metaConf = document.getElementById('metaConf');
+        const metaTemporal = document.getElementById('metaTemporal');
+        const metaAmbig = document.getElementById('metaAmbig');
+        const toast = document.getElementById('toast');
 
-        // This function will run every time the user types a key
-        searchInput.addEventListener('input', async (event) => {
-            const query = event.target.value;
+        let currentSuggestions = [];
+        let activeQuery = '';
 
-            // Clear lists if input is empty
+        // Load trending topics on page load
+        async function loadTrending() {
+            try {
+                const res = await fetch('/get_trending');
+                const data = await res.json();
+                const trending = data.trending || [];
+                if (trending.length > 0) {
+                    trendingPills.innerHTML = trending.map(item => `
+                        <span class="trending-chip" onclick="searchFor('${item.topic}')">
+                            ${item.is_bursting ? '⚡ ' : ''}${item.topic}
+                        </span>
+                    `).join('');
+                } else {
+                    trendingPills.innerHTML = `
+                        <span class="trending-chip" onclick="searchFor('python')">python</span>
+                        <span class="trending-chip" onclick="searchFor('வணக்கம்')">வணக்கம்</span>
+                        <span class="trending-chip" onclick="searchFor('trending news')">trending news</span>
+                    `;
+                }
+            } catch (e) {
+                console.error("Failed to load trending:", e);
+            }
+        }
+
+        function searchFor(term) {
+            searchInput.value = term;
+            triggerSearch(term);
+        }
+
+        function onUserChange() {
+            const uid = userSelect.value;
+            activeUserBadge.textContent = `User: ${uid.toUpperCase()}`;
+            showToast(`Switched active profile to ${uid}`);
+            if (searchInput.value.trim()) {
+                triggerSearch(searchInput.value.trim());
+            }
+        }
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        async function onSelectCandidate(word, interactionType) {
+            const uid = userSelect.value;
+            const query = searchInput.value;
+            searchInput.value = word;
+            showToast(`✓ Learned "${word}" for ${uid}`);
+
+            const rejected = currentSuggestions.filter(w => w !== word);
+            await fetch('/record_feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: query,
+                    chosen_word: word,
+                    rejected_words: rejected,
+                    interaction_type: interactionType,
+                    user_id: uid
+                })
+            });
+
+            loadTrending();
+        }
+
+        async function triggerSearch(query) {
+            activeQuery = query;
             if (!query) {
-                autocompleteList.innerHTML = '';
-                correctionList.innerHTML = '';
+                personalizedList.innerHTML = '<li style="padding:1.5rem; color:var(--text-muted); text-align:center;">Start typing to receive personalized multilingual recommendations</li>';
+                autocompleteList.innerHTML = '<li style="padding:1rem; color:var(--text-muted); text-align:center;">—</li>';
+                correctionList.innerHTML = '<li style="padding:1rem; color:var(--text-muted); text-align:center;">—</li>';
+                metaLang.textContent = '—';
+                metaIntent.textContent = '—';
+                metaConf.textContent = '—';
+                metaTemporal.textContent = '—';
+                metaAmbig.textContent = '—';
+                autoCount.textContent = '0 items';
+                corrCount.textContent = '0 items';
+                currentSuggestions = [];
                 return;
             }
 
-            // Send the user's query to our Python backend (app.py)
-            const response = await fetch('/get_suggestions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ query: query })
-            });
-            
-            const data = await response.json();
+            const uid = userSelect.value;
+            try {
+                const response = await fetch('/get_suggestions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query, user_id: uid })
+                });
 
-            // --- Update the Autocomplete List ---
-            let autoHtml = ''; // Build the HTML string
-            data.autocomplete.forEach(word => {
-                autoHtml += `<li>${word}</li>`;
-            });
-            autocompleteList.innerHTML = autoHtml; // Update the page
+                const data = await response.json();
+                currentSuggestions = data.top_k_suggestions || data.personalized_results || [];
 
-            // --- Update the Correction List ---
-            let correctHtml = '';
-            data.corrections.forEach(word => {
-                correctHtml += `<li>${word}</li>`;
-            });
-            correctionList.innerHTML = correctHtml;
+                // Render Top-K Personalized Suggestions
+                const persList = data.personalized_candidates || [];
+                if (persList.length > 0) {
+                    personalizedList.innerHTML = persList.map((c, idx) => {
+                        let badges = '';
+                        if (c.is_personalized) badges += `<span class="badge badge-pers">🎯 Personal</span>`;
+                        if (c.is_bursting) badges += `<span class="badge badge-burst">⚡ Burst</span>`;
+                        else if (c.trending_score > 0.1) badges += `<span class="badge badge-trend">🔥 Trending</span>`;
+                        badges += `<span class="badge badge-ml">Score: ${(c.final_personalized_score || c.final_score || 0).toFixed(3)}</span>`;
+
+                        return `
+                            <li class="pers-item" onclick="onSelectCandidate('${c.word}', 'select')">
+                                <div style="display:flex; flex-direction:column; gap:0.25rem;">
+                                    <div class="cand-info">
+                                        <span class="cand-rank">${idx + 1}</span>
+                                        <span class="cand-word">${c.word}</span>
+                                    </div>
+                                    <span class="cand-reason">${c.personalization_reason || c.temporal_reason || 'Standard global match'}</span>
+                                </div>
+                                <div class="cand-badges">${badges}</div>
+                            </li>
+                        `;
+                    }).join('');
+                } else {
+                    personalizedList.innerHTML = '<li style="padding:1.5rem; color:var(--text-muted); text-align:center;">No suggestions found for this query</li>';
+                }
+
+                // Render Autocomplete List
+                const auto = data.autocomplete || [];
+                autoCount.textContent = `${auto.length} items`;
+                autocompleteList.innerHTML = auto.length > 0 
+                    ? auto.map(w => `<li class="list-item" onclick="onSelectCandidate('${w}', 'select')"><span>${w}</span><span style="font-size:0.75rem; color:var(--text-muted);">prefix</span></li>`).join('')
+                    : '<li style="padding:1rem; color:var(--text-muted); text-align:center;">No prefix matches</li>';
+
+                // Render Autocorrect List
+                const corr = data.corrections || [];
+                corrCount.textContent = `${corr.length} items`;
+                correctionList.innerHTML = corr.length > 0 
+                    ? corr.map(w => `<li class="list-item" onclick="onSelectCandidate('${w}', 'accept')"><span>${w}</span><span style="font-size:0.75rem; color:var(--accent-amber);">correct</span></li>`).join('')
+                    : '<li style="padding:1rem; color:var(--text-muted); text-align:center;">No typos detected</li>';
+
+                // Pipeline Diagnostics
+                metaLang.textContent = `${data.language || 'unknown'} (${data.type || 'native'})`;
+                metaIntent.textContent = data.intent || 'unknown';
+                metaConf.textContent = `${(data.confidence_level || 'low').toUpperCase()} (${((data.confidence_score || 0) * 100).toFixed(0)}%)`;
+                
+                if (data.temporal_detected) {
+                    metaTemporal.innerHTML = `<span style="color:var(--accent-amber); font-weight:700;">🔥 ${data.temporal_type || 'Active'}</span>`;
+                } else {
+                    metaTemporal.textContent = 'None';
+                }
+
+                if (data.is_ambiguous) {
+                    metaAmbig.innerHTML = `<span style="color:var(--accent-rose); font-weight:700;">⚠️ Ambiguous</span>`;
+                } else {
+                    metaAmbig.innerHTML = `<span style="color:var(--accent-green); font-weight:700;">✓ Clear</span>`;
+                }
+
+            } catch (err) {
+                console.error("Search error:", err);
+            }
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            triggerSearch(e.target.value.trim());
         });
-    </script>
 
+        // Initialize trending on load
+        loadTrending();
+    </script>
 </body>
 </html>

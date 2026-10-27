@@ -1,0 +1,327 @@
+/* Multilingual Spelling Assistant - Inline Content Styles (Grammarly Style) */
+
+/* ==========================================================================
+   1. WAVY RED UNDERLINES (For Contenteditable)
+   ========================================================================== */
+.msg-wavy-error {
+  position: relative !important;
+  text-decoration: underline wavy #ef4444 !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3.5px !important;
+  text-decoration-skip-ink: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3'%3E%3Cpath d='M0 2.5 Q 1.5 0, 3 2.5 T 6 2.5' fill='none' stroke='%23ef4444' stroke-width='1.2'/%3E%3C/svg%3E") !important;
+  background-repeat: repeat-x !important;
+  background-position: bottom !important;
+  background-size: 6px 3px !important;
+  padding-bottom: 2px !important;
+  cursor: pointer !important;
+  border-radius: 2px !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.msg-wavy-error:hover {
+  background-color: rgba(239, 68, 68, 0.22) !important;
+}
+
+/* ==========================================================================
+   2. MIRROR UNDERLAY (For Input & Textarea Elements)
+   ========================================================================== */
+.msg-mirror-overlay {
+  position: fixed !important;
+  pointer-events: none !important;
+  color: transparent !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  z-index: 2147483640 !important; /* Layered directly over input with transparent text */
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.msg-mirror-wavy {
+  color: transparent !important;
+  text-decoration: underline wavy #ef4444 !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3.5px !important;
+  text-decoration-skip-ink: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3'%3E%3Cpath d='M0 2.5 Q 1.5 0, 3 2.5 T 6 2.5' fill='none' stroke='%23ef4444' stroke-width='1.2'/%3E%3C/svg%3E") !important;
+  background-repeat: repeat-x !important;
+  background-position: bottom !important;
+  background-size: 6px 3px !important;
+  padding-bottom: 2px !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  border-radius: 2px !important;
+}
+
+.msg-mirror-wavy:hover {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* ==========================================================================
+   3. FLOATING CORRECTION POPUP (Grammarly Dark Theme)
+   ========================================================================== */
+.msg-popup-container {
+  all: initial;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #f1f5f9;
+  box-sizing: border-box;
+  animation: msg-popup-fade-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.msg-popup-container * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+@keyframes msg-popup-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.msg-popup-card {
+  width: 270px;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Header */
+.msg-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+  padding-bottom: 6px;
+}
+
+.msg-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.msg-detected-word {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f87171;
+  text-decoration: line-through;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 140px;
+}
+
+.msg-pill-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  text-transform: capitalize;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.msg-dismiss-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.msg-dismiss-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Primary Best Suggestion */
+.msg-best-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(16, 185, 129, 0.15));
+  border: 1.5px solid #38bdf8;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.msg-best-suggestion:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(16, 185, 129, 0.28));
+  border-color: #67e8f9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+}
+
+.msg-best-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.msg-check-icon {
+  width: 18px;
+  height: 18px;
+  background: #10b981;
+  color: #0b0f19;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.msg-best-word {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.msg-best-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.msg-replace-btn-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+/* Alternatives List */
+.msg-alternatives-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msg-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-left: 2px;
+}
+
+.msg-alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.msg-alt-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.msg-alt-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.msg-alt-word {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.msg-alt-item:hover .msg-alt-word {
+  color: #ffffff;
+}
+
+.msg-alt-rank {
+  font-size: 9.5px;
+  color: #64748b;
+}
+
+/* Footer & Actions */
+.msg-popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid rgba(51, 65, 85, 0.6);
+  font-size: 10px;
+}
+
+.msg-ignore-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 10.5px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.msg-ignore-btn:hover {
+  color: #f1f5f9;
+  text-decoration: underline;
+}
+
+.msg-engine-brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #64748b;
+  font-size: 9.5px;
+}
+
+.msg-engine-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #34d399;
+}

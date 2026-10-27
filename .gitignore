@@ -1,0 +1,39 @@
+# Virtual Environment & Python cache
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Datasets (Strictly Excluded)
+*.csv
+*.csv*
+data/*.csv
+data/*.csv*
+data/*.txt
+data/ta_rom
+unigram_freq.csv
+
+# Operating System Files
+.DS_Store
+*/.DS_Store
+**/.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+*.textClipping
+
+# Application Bundles & Local Archives
+Visual Studio Code.app/
+Archive/
+*.zip
+*.tar
+*.tar.gz
+
+# Personal / Sensitive Documents
+*Resume*.docx

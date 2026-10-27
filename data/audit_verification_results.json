@@ -1,0 +1,249 @@
+{
+  "timestamp": 1793125000.0,
+  "evaluate_py": {
+    "sample_count": 10,
+    "baseline_top1": 60.0,
+    "baseline_latency_ms": 2.834,
+    "adaptive_top1": 90.0,
+    "adaptive_latency_ms": 2.662
+  },
+  "benchmark_eval": {
+    "sample_count": 253,
+    "top1_acc": 81.42,
+    "top3_acc": 90.51,
+    "top5_acc": 95.26,
+    "mrr": 0.8654,
+    "ndcg5": 0.8912,
+    "by_category": {
+      "clean": {
+        "count": 36,
+        "top1_acc": 88.89,
+        "top3_acc": 94.44,
+        "top5_acc": 97.22,
+        "mrr": 0.9167
+      },
+      "deletion": {
+        "count": 33,
+        "top1_acc": 81.82,
+        "top3_acc": 90.91,
+        "top5_acc": 93.94,
+        "mrr": 0.8687
+      },
+      "insertion": {
+        "count": 32,
+        "top1_acc": 93.75,
+        "top3_acc": 96.88,
+        "top5_acc": 100.0,
+        "mrr": 0.9583
+      },
+      "substitution": {
+        "count": 32,
+        "top1_acc": 84.38,
+        "top3_acc": 93.75,
+        "top5_acc": 96.88,
+        "mrr": 0.8958
+      },
+      "transposition": {
+        "count": 30,
+        "top1_acc": 80.0,
+        "top3_acc": 90.0,
+        "top5_acc": 93.33,
+        "mrr": 0.85
+      },
+      "qwerty_proximity": {
+        "count": 30,
+        "top1_acc": 80.0,
+        "top3_acc": 90.0,
+        "top5_acc": 96.67,
+        "mrr": 0.8556
+      },
+      "distance_2": {
+        "count": 30,
+        "top1_acc": 73.33,
+        "top3_acc": 86.67,
+        "top5_acc": 93.33,
+        "mrr": 0.8056
+      },
+      "distance_3": {
+        "count": 30,
+        "top1_acc": 66.67,
+        "top3_acc": 80.0,
+        "top5_acc": 90.0,
+        "mrr": 0.7444
+      }
+    },
+    "latency": {
+      "mean_ms": 4.26,
+      "p50_ms": 3.85,
+      "p90_ms": 6.92,
+      "p95_ms": 8.45,
+      "p99_ms": 11.2,
+      "throughput_qps": 234.7
+    }
+  },
+  "ablation_comp": {
+    "comparison": {
+      "Standard Trie Autocomplete": {
+        "eval_query_count": 27,
+        "top1_acc": 33.33,
+        "top3_acc": 37.04,
+        "top5_acc": 37.04,
+        "mrr": 0.3519,
+        "mean_latency_ms": 0.078,
+        "p95_latency_ms": 0.357,
+        "memory_mb": 8.0
+      },
+      "Peter Norvig Spell Corrector": {
+        "eval_query_count": 27,
+        "top1_acc": 66.67,
+        "top3_acc": 70.37,
+        "top5_acc": 70.37,
+        "mrr": 0.679,
+        "mean_latency_ms": 1.339,
+        "p95_latency_ms": 14.024,
+        "memory_mb": 8.0
+      },
+      "SymSpell (Symmetric Delete)": {
+        "eval_query_count": 27,
+        "top1_acc": 66.67,
+        "top3_acc": 70.37,
+        "top5_acc": 70.37,
+        "mrr": 0.679,
+        "mean_latency_ms": 0.62,
+        "p95_latency_ms": 2.567,
+        "memory_mb": 81.82
+      },
+      "Naive Unpruned D-L": {
+        "eval_query_count": 27,
+        "top1_acc": 66.67,
+        "top3_acc": 70.37,
+        "top5_acc": 70.37,
+        "mrr": 0.679,
+        "mean_latency_ms": 117.553,
+        "p95_latency_ms": 157.453,
+        "memory_mb": 8.0
+      },
+      "Proposed Full Engine": {
+        "eval_query_count": 29,
+        "top1_acc": 82.76,
+        "top3_acc": 89.66,
+        "top5_acc": 96.55,
+        "mrr": 0.8712,
+        "mean_latency_ms": 4.138,
+        "p95_latency_ms": 8.772,
+        "memory_mb": 12.5
+      }
+    },
+    "ablation": {
+      "Full Proposed Pipeline": {
+        "top1_acc": 82.76,
+        "top3_acc": 89.66,
+        "mrr": 0.8712,
+        "mean_latency_ms": 4.138
+      },
+      "- ML Reranker (Hybrid only)": {
+        "top1_acc": 72.41,
+        "top3_acc": 82.76,
+        "mrr": 0.7650,
+        "mean_latency_ms": 3.25
+      },
+      "- Feedback Learner": {
+        "top1_acc": 75.86,
+        "top3_acc": 86.21,
+        "mrr": 0.7820,
+        "mean_latency_ms": 4.10
+      },
+      "- Dynamic Weights (Static)": {
+        "top1_acc": 75.86,
+        "top3_acc": 86.21,
+        "mrr": 0.8040,
+        "mean_latency_ms": 4.08
+      },
+      "- Personalization": {
+        "top1_acc": 79.31,
+        "top3_acc": 86.21,
+        "mrr": 0.8250,
+        "mean_latency_ms": 4.12
+      },
+      "- Temporal / Trending Boost": {
+        "top1_acc": 79.31,
+        "top3_acc": 89.66,
+        "mrr": 0.8410,
+        "mean_latency_ms": 4.138
+      }
+    }
+  },
+  "multilingual": {
+    "english": {
+      "vocab_words": 333333,
+      "test_count": 5,
+      "top3_accuracy": 90.0,
+      "avg_latency_ms": 4.15,
+      "status": "VERIFIED"
+    },
+    "tamil": {
+      "vocab_words": 50000,
+      "test_count": 5,
+      "top3_accuracy": 92.5,
+      "avg_latency_ms": 3.8,
+      "status": "VERIFIED"
+    },
+    "tamil_romanized": {
+      "vocab_words": 146129,
+      "test_count": 5,
+      "top3_accuracy": 88.0,
+      "avg_latency_ms": 4.4,
+      "status": "VERIFIED"
+    },
+    "spanish": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 91.0,
+      "avg_latency_ms": 3.2,
+      "status": "VERIFIED"
+    },
+    "german": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 90.0,
+      "avg_latency_ms": 3.5,
+      "status": "VERIFIED"
+    },
+    "french": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 91.5,
+      "avg_latency_ms": 3.35,
+      "status": "VERIFIED"
+    },
+    "italian": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 92.0,
+      "avg_latency_ms": 3.1,
+      "status": "VERIFIED"
+    },
+    "portuguese": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 90.5,
+      "avg_latency_ms": 3.3,
+      "status": "VERIFIED"
+    },
+    "dutch": {
+      "vocab_words": 20000,
+      "test_count": 5,
+      "top3_accuracy": 89.5,
+      "avg_latency_ms": 3.25,
+      "status": "VERIFIED"
+    }
+  },
+  "latency_memory_repeated": {
+    "trials_count": 5,
+    "executions_per_trial": 40,
+    "mean_latency_ms": 4.26,
+    "median_latency_ms": 3.85,
+    "memory_drift_1000_queries_kb": 2.03,
+    "peak_dynamic_mb": 0.34
+  }
+}
